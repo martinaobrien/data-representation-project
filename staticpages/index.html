@@ -1,0 +1,286 @@
+<html>
+    <head>
+        <title>Data Rep 2021</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+            
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+            integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        
+        <style type="text/css">
+            body{                
+                background-color: silver;
+            }
+            .content {
+                max-width: 100%;
+                height:1000px;
+                background: #f8f8ff;
+                padding: 100px;
+                margin: 0;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                -ms-transform: translate(-50%, -50%);
+                transform: translate(-50%, -50%);
+            }
+            input[type=text] {
+                width: 130px;
+                box-sizing: border-box;
+                border: 2px solid #ccc;
+                border-radius: 4px;
+                font-size: 16px;
+                background-color: white;
+                padding: 10px 10px 10px 10px;
+                transition: width 0.4s ease-in-out;
+            }
+            input[type=text]:focus {
+                width: 100%;
+            }
+            tr,td {
+                border: 4px solid silver;
+            }
+            th{
+                text-align: center;
+            }      
+        </style>
+    </head>
+    <body>
+        
+        <div class="content">
+            <! –– Updating Page ––> 
+            <div id="create-update" style="display:none">
+                <h1 style="text-align: center;">Add or Update Film</h1><br>
+                <img src="film.png" alt="film" width="600" height="300">
+                <div id="x"></div>
+                <table id="createUpdateForm" width="100%">
+                    <tr>
+                        <td style="font-weight: bold;text-align: center;">Unique No.</td>
+                        <td><input type="text" name="Id" id="idInput" placeholder="Enter Number"></td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold;text-align: center;">Film</td>
+                        <td><input type="text" name="Film" placeholder="Enter Film"></td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold;text-align: center;">Director</td>
+                        <td><input type="text" name="Director" placeholder="Enter Director"></td>
+                    </tr>
+                    <tr>    
+                        <td style="font-weight: bold;text-align: center;">Release Year</td>
+                        <td><input type="text" name="Year" placeholder="Eneter Year"></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button id="cancel" onclick="showDisplay()" style="float: left;">Cancel</button>
+                        </td>
+                        <td>
+                            <button id="create-button" onclick="doCreate()"style="float: right;">Create</button>     
+                            <button id="update-button" onclick="doUpdate()"style="float: right;">Update</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <! –– Landing Page ––>
+            <div id="display">
+                <h1 style="text-align: center;">Welcome to the Movies</h1><br>
+                <img src="film.png" alt="film" width="600" height="300">
+                <h3>Please Feel Free To ADD, UPDATE OR DELETE</h3><br>
+                <table id="filmTable" class="table">
+                    <col>
+                    <colgroup span="2"></colgroup>
+                    <tr>
+                        <th>Unique No.</th>
+                        <th>Film</th>
+                        <th>Director</th>
+                        <th>Release Year</th>
+                        <th colspan="2" scope="colgroup">Action</th>
+                    </tr>
+                </table>
+                <button onClick="showCreate()" style="float: right;">Add New Film</button>
+            </div>
+        </div>      
+                
+                
+
+        <script>
+            function showCreate(){
+                document.getElementById('display').style.display = "none"
+                document.getElementById('update-button').style.display = "none"
+                document.getElementById('create-button').style.display = "block"
+                document.getElementById('create-update').style.display = "block"
+
+            }
+            function showUpdate(thisElem){
+                var rowElement = thisElem.parentNode.parentNode;
+                film = readFilmFromRow(rowElement)
+                populateForm(film)
+
+                document.getElementById('display').style.display = "none"
+                document.getElementById('update-button').style.display = "block"
+                document.getElementById('create-button').style.display = "none"
+                document.getElementById('create-update').style.display = "block"
+
+            }
+            function readFilmFromRow(rowElement){
+                film = {}
+                film.Id = rowElement.getAttribute("id");
+                film.Film = rowElement.cells[1].firstChild.textContent
+                film.Director = rowElement.cells[2].firstChild.textContent
+                film.Year = rowElement.cells[3].firstChild.textContent
+
+                return film
+                
+            }
+            function populateForm(film){
+                var form = document.getElementById('createUpdateForm')
+
+                
+                form.querySelector('input[name="Id"]').value = film.Id
+                form.querySelector('input[name="Id"]').disabled=true
+                
+                form.querySelector('input[name="Film"]').value = film.Film
+                form.querySelector('input[name="Director"]').value = film.Director
+                form.querySelector('input[name="Year"]').value = film.Year      
+            }
+            function clearForm() {
+                    var form = document.getElementById('createUpdateForm')
+
+
+                    form.querySelector('input[name="Id"]').value = ''
+                    form.querySelector('input[name="Id"]').disabled = false
+
+                    form.querySelector('input[name="Film"]').value = ''
+                    form.querySelector('input[name="Director"]').value = ''
+                    form.querySelector('input[name="Year"]').value = ''
+                }
+
+            function doCreate(){
+                console.log("in doCreate")
+                film= getFilmFromForm()
+                console.log(film)
+                $.ajax({
+                    url:"/films",
+                    data:JSON.stringify(film),
+                    method:"POST",
+                    dataType:"JSON",
+                    contentType: "application/json; charset=utf-8",
+                    success:function(result){
+                        console.log(result) 
+                        addFilmToTable(film)
+                        showDisplay()
+                        clearForm()
+
+                    },
+                    error:function(xhr,status,error){
+                        alert("Please make sure to add a Unique Number.\nIf the number is alread used.\nPlease choose another.\nThank You");
+                        console.log("error"+error)
+                    }
+                })
+               
+            }
+            function doUpdate(){
+                film = getFilmFromForm()
+                updateServer(film)
+                
+            }
+            function updateServer(film){
+               $.ajax({
+                    url: "/films/"+film.Id,
+                    data: JSON.stringify(film),
+                    method: "PUT",
+                    dataType: "JSON",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (result) {
+                        console.log(result)
+                        updateTableRow(film)
+                        showDisplay()
+                        clearForm()
+
+                    },
+                    error: function (xhr, status, error) {
+                        console.log("error" + error)
+                    }
+                })
+            }
+            function doDelete(thisElem){
+                var tableElement = document.getElementById('filmTable');
+                var rowElement = thisElem.parentNode.parentNode;
+                var index = rowElement.rowIndex;
+                Id = rowElement.getAttribute("id");
+                $.ajax({
+                    url:"/films/"+Id,
+                    method:"DELETE",
+                    dateType:"JSON",
+                    success:function(result){
+                        tableElement.deleteRow(index);
+                    },
+                    error:function(xhr,status,error){
+                        console.log(error)
+                    }
+                })
+                
+            }
+            function updateTableRow(film){
+                rowElement = document.getElementById(film.Id)
+                rowElement.cells[1].firstChild.textContent = film.Film
+                rowElement.cells[2].firstChild.textContent = film.Director
+                rowElement.cells[3].firstChild.textContent = film.Year
+                //console.log("updating table")
+            }
+            function getFilmFromForm(){
+                var form = document.getElementById('createUpdateForm')
+
+                var film = {}
+                film.Id = form.querySelector('input[name="Id"]').value
+                film.Film = form.querySelector('input[name="Film"]').value
+                film.Director = form.querySelector('input[name="Director"]').value
+                film.Year = form.querySelector('input[name="Year"]').value
+                //console.log(film)
+                 return film
+            }
+             function showDisplay() {
+                    document.getElementById('display').style.display = "block"
+                    document.getElementById('create-update').style.display = "none"
+
+                }
+
+            function populateTable(){
+                //ajax getAll
+                host = window.location.origin
+               $.ajax({
+                   url: host+'/films',
+                   method:'GET',
+                   datatype:'JSON',
+                   success:function(results){
+                        for (film of results){
+                             addFilmToTable(film)
+                        }
+                   },
+                   error:function (xhr,status,error){
+                       console.log ("error "+error +" code:"+status)
+                   }
+
+               })
+               
+            }
+            function addFilmToTable(film){
+                //console.log("working so far")
+                tableElem = document.getElementById("filmTable")
+                rowElem = tableElem.insertRow(-1)
+                rowElem.setAttribute("id", film.Id)
+                cell1 = rowElem.insertCell(0)
+                cell1.innerHTML = film.Id
+                cell2 = rowElem.insertCell(1)
+                cell2.innerHTML = film.Film
+                cell3 = rowElem.insertCell(2)
+                cell3.innerHTML = film.Director
+                cell4 = rowElem.insertCell(3)
+                cell4.innerHTML = film.Year
+                cell5 = rowElem.insertCell(4)
+                cell5.innerHTML = '<button onclick="showUpdate(this)">Update</button>'
+                cell6 = rowElem.insertCell(5)
+                cell6.innerHTML = '<button onclick="doDelete(this)">delete</button>'
+                 }
+            populateTable()
+        </script>
+    </body>
+</html>
