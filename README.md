@@ -20,10 +20,12 @@ The Web application created:
 The repository contains the following files: 
 - README.md - overview of the repository and implementation of the programme
 - FilmDAO.py - the implementation of the code for the local host interface
-- application.py - 
-- dbconfig.py
-- dbconfigtemplate.py
-- requirements.txt - 
+- application.py - server for the programme
+- create_database.py - creating the neccessary database for implementation by user (## only needed if you don't have a database called 'datarepresentation' already in your mysql)
+- create_tables.py - creating the neccessary table for films for implementation by user
+- dbconfig.py - contains username and password (this will not be uploaded to Github)
+- dbconfigtemplate.py - this is the setting up for dbconfig.py (this is to be manipulated by users to access their mysqls)
+- requirements.txt - contains neccessary packages
 - index.html - browswer interface for the database
 - .gitignore - files and applications that are ignored by Github to ensure implementation without errors
 - License - License of the Repository
@@ -42,10 +44,13 @@ The repository contains the following files:
 Under the repository name, click clone or download
 You have an option to clone the repository to your machine or clone with HTTPs and using the URL, open Git Bask and redirect to the location where you are able to implement the code.
 
+
 ## Running the Web Application
 - Navigate to your command line
+- If needed, run the create_database.py as indicated in the Contents section
+- Run the create_table.py to create the necessary table in your database
 - Open application.py 
-- Use application.py to initiate the web application
+- Run application.py to initiate the web application
 
 ## License:
 The repository is for use within the GNU General Public License 3.0. To find more on the license: https://www.gnu.org/licenses/gpl-3.0.en.html
