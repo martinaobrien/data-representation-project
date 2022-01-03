@@ -1,5 +1,7 @@
 # GMIT-Data Representation and Querying: Project 2021
 
+![alt text](https://github.com/martinaobrien/data-representation-project/blob/main/staticpages/GMIT-LOGO.jpg)
+
 #### GMIT Higher Diploma in Data Analytics
 #### Data Representation and Querying
 #### Author: Martina O'Brien
