@@ -6,7 +6,8 @@ app = Flask(__name__, static_url_path='', static_folder='staticpages')
 
 @app.route('/')
 def index():
-    return "Welcome to the Movies"
+    #return "Welcome to the Movies"
+    return app.send_static_file('index.html')
 # get all
 
 
