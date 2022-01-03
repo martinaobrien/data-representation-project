@@ -1,3 +1,10 @@
+# =================================================================== #
+# Module        : Data Representation
+# Author        : Martina O'Brien - G00376463
+# Description   : Setting up of the connection and queries to the Mysql
+# File Name     : FilmDao.py
+# =================================================================== #
+
 import mysql.connector
 import dbconfig as cfg
 from mysql.connector import cursor

@@ -1,3 +1,10 @@
+# =================================================================== #
+# Module        : Data Representation
+# Author        : Martina O'Brien - G00376463
+# Description   : Python to create a table in Mysql 
+# File Name     : create_Table.py
+# =================================================================== #
+
 import mysql.connector
 
 db = mysql.connector.connect(

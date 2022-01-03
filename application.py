@@ -1,3 +1,10 @@
+# =================================================================== #
+# Module        : Data Representation
+# Author        : Martina O'Brien - G00376463
+# Description   : Server for the programme
+# File Name     : application.py
+# =================================================================== #
+
 from flask import Flask, url_for, request, redirect, abort, jsonify
 from FilmDao import filmDao
 
