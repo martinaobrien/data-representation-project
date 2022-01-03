@@ -68,7 +68,7 @@ class FilmDao:
         sql = 'delete from films where Id = %s'
         values = [Id]
         cursor.execute(sql, values)
-
+        self.db.commit()
         return {}
 
     def convertToDict(self, result):
