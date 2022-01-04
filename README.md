@@ -1,4 +1,4 @@
-# GMIT-Data Representation and Querying: Project 2021
+# GMIT-Data Representation: Project 2021
 
 ![alt text](https://github.com/martinaobrien/data-representation-project/blob/main/staticpages/GMIT-LOGO.jpg)
 
